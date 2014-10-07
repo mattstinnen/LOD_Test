@@ -47,7 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\SCR_MeshBuilder.cs" />
+     <Compile Include="Assets\Scripts\SCR_MovePointTest.cs" />
      <Compile Include="Assets\Scripts\SCR_PlaneTEst.cs" />
+     <Compile Include="Assets\Scripts\SCR_QuadNode.cs" />
+     <Compile Include="Assets\Scripts\SCR_QuadTree.cs" />
+     <Compile Include="Assets\Scripts\SCR_QuadTreePlane.cs" />
      <Compile Include="Assets\Scripts\SCR_Tess_Cube.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>

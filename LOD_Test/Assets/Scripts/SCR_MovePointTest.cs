@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class SCR_Tess_Cube : MonoBehaviour 
-{	
-	
-	
+public class SCR_MovePointTest : MonoBehaviour {
+
 	public Vector3[] m_Points = new Vector3[4];
 	// Use this for initialization
 	void Start () 
