@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically each node is a quad to be rendered higher depth higher resolution
  {
 
-	SCR_QuadNode[] m_Nodes = new SCR_QuadNode[4];
+	List<SCR_QuadNode> m_Nodes = new List<SCR_QuadNode>();
 	int m_Depth;
-	Vector3[] m_Points = new Vector3[4];
+	List<Vector3> m_Points = new List<Vector3>();
 	float m_Size;
 	public int GetDepth()
 	{
@@ -18,12 +18,12 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 		m_Depth = -1;
 	}
 	
-	public SCR_QuadNode(int depth, Vector3[] points,float size)
+	public SCR_QuadNode(int depth, List<Vector3> points,float size)
 	{
 		m_Depth 	= depth;
 		m_Points 	= points;
 		m_Size 		= size;
-		for(int i = 0; i < m_Nodes.Length; ++i)
+		for(int i = 0; i < m_Nodes.Count; ++i)
 		{
 			m_Nodes[i] = null;
 		}
@@ -31,117 +31,93 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 	
 	public void Clear() // clears the tree recursivly 
 	{
-		for(int i = 0; i < m_Nodes.Length; ++i)
+		for(int i = 0; i < m_Nodes.Count; ++i)
 		{
 			if(m_Nodes[i]!= null)
 			{
-				m_Nodes[i].Clear();
-				m_Nodes[i] = null;
+				m_Nodes.Clear();
 			}
 		}
 	}
 	
-	
+	List<Vector3> GenQuadPoints(float newSize)
+	{
+		Debug.Log(newSize);
+		List<Vector3> newPoints = new List<Vector3>();
+		
+		//BOTTOM LEFT 
+		newPoints.Add(new Vector3(m_Points[0].x, m_Points[0].y, m_Points[0].z));//BL
+		newPoints.Add(new Vector3(m_Points[1].x, m_Points[1].y, m_Points[1].z - newSize));//TL
+		newPoints.Add(new Vector3(m_Points[2].x - newSize, m_Points[2].y, m_Points[2].z - newSize));//TR
+		newPoints.Add(new Vector3(m_Points[3].x - newSize, m_Points[3].y, m_Points[3].z));//BR
+		
+		Debug.Log(newPoints[newPoints.Count-1]);
+		
+		// TOP LEFT
+		newPoints.Add(new Vector3(m_Points[0].x, m_Points[0].y, m_Points[0].z + newSize));//BL
+		newPoints.Add(new Vector3(m_Points[1].x, m_Points[1].y, m_Points[1].z));//TL
+		newPoints.Add(new Vector3(m_Points[2].x - newSize, m_Points[2].y, m_Points[2].z));//TR
+		newPoints.Add(new Vector3(m_Points[3].x - newSize, m_Points[3].y, m_Points[3].z + newSize));//BR
+		
+		Debug.Log(newPoints[newPoints.Count-1]);
+		
+		//TOP RIGHT
+		newPoints.Add(new Vector3(m_Points[0].x + newSize, m_Points[0].y, m_Points[0].z + newSize));//BL
+		newPoints.Add(new Vector3(m_Points[1].x + newSize, m_Points[1].y, m_Points[1].z));//TL
+		newPoints.Add(new Vector3(m_Points[2].x, m_Points[2].y, m_Points[2].z));//TR
+		newPoints.Add(new Vector3(m_Points[3].x, m_Points[3].y, m_Points[3].z + newSize));//BR
+		
+		Debug.Log(newPoints[newPoints.Count-1]);
+		
+		//BOTTOM RIGHT
+		newPoints.Add(new Vector3(m_Points[0].x + newSize, m_Points[0].y, m_Points[0].z));//BL
+		newPoints.Add(new Vector3(m_Points[1].x + newSize, m_Points[1].y, m_Points[1].z - newSize));//TL
+		newPoints.Add(new Vector3(m_Points[2].x, m_Points[2].y, m_Points[2].z - newSize));//TR
+		newPoints.Add(new Vector3(m_Points[3].x, m_Points[3].y, m_Points[3].z));//BR
+		
+		Debug.Log(newPoints[newPoints.Count-1]);
+		
+		return newPoints;
+	}
 	
 	public void Split() // splits node into 4 nodes/ calculate new positions 
 	{
-		if(m_Nodes[0] == null) // if we know the node has not been split
+		if(m_Nodes.Count == 0) // if we know the node has not been split
 		{
 			float newSize = m_Size *0.5f;
-			Vector3[] newPoints = new Vector3[4];
+			List<Vector3> newPoints = GenQuadPoints(newSize);
 			
-			//BOTTOM LEFT
-			newPoints[1] 	= m_Points[1];//TL
-			newPoints[1].z 	= m_Points[1].z - newSize;
-			
-			newPoints[0] 	= m_Points[0];//BL
-			
-			newPoints[2] 	= m_Points[2];//TR
-			newPoints[2].z 	= m_Points[2].z - newSize;
-			newPoints[2].x 	= m_Points[2].x - newSize;
-			
-			newPoints[3] 	= m_Points[3];//BR
-			newPoints[3].x 	= m_Points[3].x - newSize;
-			
-			
-			
-			m_Nodes[0] = new SCR_QuadNode(m_Depth+1,newPoints,newSize);
-			newPoints = new Vector3[4];
-			
-			
-			// TOP LEFT
-			newPoints[1] 	= m_Points[1];//TL
-			
-			newPoints[0] 	= m_Points[0];//BL
-			newPoints[0].z 	= m_Points[0].z + newSize;
-			
-			newPoints[2] 	= m_Points[2];//TR
-			newPoints[2].x 	= m_Points[2].x - newSize;
-			
-			newPoints[3] 	= m_Points[3];//BR
-			newPoints[3].z 	= m_Points[3].z + newSize;
-			newPoints[3].x 	= m_Points[3].x - newSize;
-			
-		
-			m_Nodes[1] = new SCR_QuadNode(m_Depth+1,newPoints,newSize);
-			newPoints = new Vector3[4];
-			//TOP RIGHT
-			newPoints[1] 	= m_Points[1];//TL
-			newPoints[1].x 	= m_Points[1].x + newSize;
-			
-			newPoints[0] 	= m_Points[0];//BL
-			newPoints[0].x 	= m_Points[0].x + newSize;
-			newPoints[0].z 	= m_Points[0].z + newSize;
-			
-			newPoints[2] 	= m_Points[2];//TR
-			
-			newPoints[3] 	= m_Points[3];//BR
-			newPoints[3].z 	= m_Points[3].z + newSize;
-		
-			m_Nodes[2] = new SCR_QuadNode(m_Depth+1,newPoints,newSize);
-			newPoints = new Vector3[4];
-			//BOTTOM RIGHT
-			newPoints[1] 	= m_Points[1];//TL
-			newPoints[1].x 	= m_Points[1].x + newSize;
-			newPoints[1].z 	= m_Points[1].z - newSize;
-			
-			newPoints[0] 	= m_Points[0];//BL
-			newPoints[0].x 	= m_Points[0].x + newSize;
-			
-			newPoints[2] 	= m_Points[2];//TR
-			newPoints[2].z 	= m_Points[2].z - newSize;
-			
-			newPoints[3] 	= m_Points[3];//BR
-			
-			m_Nodes[3] = new SCR_QuadNode(m_Depth+1,newPoints,newSize);
+			for(int i = 0; i < 4; ++i)
+				m_Nodes.Add(new SCR_QuadNode(m_Depth + 1, newPoints.GetRange(i * 4, 4), newSize));
 		}
 	}
 	
 	public void SplitAll() //TODO:: THIS WORKS FOR FIRST ITERATION BUT NOT SECOND * UNITY LOCKS UP*/stack overflows .... think its calling itself too manytimes, problem with null check?
 	{
 		// if we dont have anything lower we should split
-		if(m_Nodes[0] == null)
+		if(m_Nodes.Count == 0)
 		{
 			Split();
 		}
 		else // go a layer deeper
 		{
-			SplitAll();
+			foreach(SCR_QuadNode node in m_Nodes)
+			{
+				node.SplitAll();
+			}
 		}
 	}
 	
-	public Vector3[] GetPoints()
+	public List<Vector3> GetPoints()
 	{
 		return m_Points;
 	}
 
-	public void GetAllPoints(ref List<Vector3[]> pointList) // recursivly gathers all available points
+	public void GetAllPoints(ref List<List<Vector3>> pointList) // recursivly gathers all available points
 	{
-		Debug.Log("GET ALL POINTS NODE Depth-" + m_Depth);
 		bool gatherPoints = true;
-		for(int i = 0; i < m_Nodes.Length; ++i)
+		for(int i = 0; i < m_Nodes.Count; ++i)
 		{
-			Debug.Log("null check" + (m_Nodes[i] == null));
 			if(m_Nodes[i] != null) // if we are not at the bottom of the tree go deeper
 			{
 				gatherPoints = false;

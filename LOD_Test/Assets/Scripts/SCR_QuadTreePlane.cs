@@ -25,20 +25,16 @@ public class SCR_QuadTreePlane : MonoBehaviour {
 	
 	public void Redraw()
 	{
-		Debug.Log("REDRAW START");
-		List<Vector3[]> pointList = new List<Vector3[]>();
+		List<List<Vector3>> pointList = new List<List<Vector3>>();
 		m_Tree.GetAllPoints(ref pointList); // get all the points from tree
-		Debug.Log(pointList.Count);
 		
 		SCR_MeshBuilder meshBuilder = new SCR_MeshBuilder();
 		int indexMath = 0;// using this to jump for the start of each quad's indicies
 		for(int i = 0; i < pointList.Count; ++i)
 		{
-			Debug.Log("quad count =" + i + " " + indexMath);
 			meshBuilder.Vertices.AddRange(pointList[i]);
 			meshBuilder.AddTriangle(indexMath, indexMath + 1, indexMath + 2);
 			meshBuilder.AddTriangle(indexMath, indexMath + 2, indexMath + 3);
-			
 			indexMath += 4;
 		}
 		

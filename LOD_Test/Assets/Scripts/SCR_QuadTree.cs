@@ -7,7 +7,7 @@ public class SCR_QuadTree : MonoBehaviour {
 	SCR_QuadNode m_TopNode;
 	public int m_MaxDepth;
 	float m_Size = 10;
-	public Vector3[] m_StartPoints = new Vector3[4];
+	public List<Vector3> m_StartPoints = new List<Vector3>();
 	// Use this for initialization
 	void Start ()
 	{
@@ -19,9 +19,8 @@ public class SCR_QuadTree : MonoBehaviour {
 	
 	}
 
-	public void GetAllPoints(ref List<Vector3[]> pointList)
+	public void GetAllPoints(ref List<List<Vector3>> pointList)
 	{
-		Debug.Log("QUADTREE GETALLPOINTS");
 		m_TopNode.GetAllPoints(ref pointList);
 	}
 	
