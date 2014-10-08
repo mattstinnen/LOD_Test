@@ -7,10 +7,10 @@ public class SCR_MovePointTest : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		m_Points[0] = new Vector3(0.0f,0.0f,0.0f);
-		m_Points[1] = new Vector3(0.0f,0.0f,1.0f);
-		m_Points[2] = new Vector3(1.0f,0.0f,1.0f);
-		m_Points[3] = new Vector3(1.0f,0.0f,0.0f);
+		m_Points[0] = new Vector3(0.0f,0.0f,0.0f);//BL
+		m_Points[1] = new Vector3(0.0f,0.0f,1.0f);//TL
+		m_Points[2] = new Vector3(1.0f,0.0f,1.0f);//TR
+		m_Points[3] = new Vector3(1.0f,0.0f,0.0f);//BR
 	}
 	
 	// Update is called once per frame
