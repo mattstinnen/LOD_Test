@@ -42,7 +42,7 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 	
 	List<Vector3> GenQuadPoints(float newSize)
 	{
-		Debug.Log(newSize);
+	
 		List<Vector3> newPoints = new List<Vector3>();
 		
 		//BOTTOM LEFT 
@@ -50,16 +50,12 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 		newPoints.Add(new Vector3(m_Points[1].x, m_Points[1].y, m_Points[1].z - newSize));//TL
 		newPoints.Add(new Vector3(m_Points[2].x - newSize, m_Points[2].y, m_Points[2].z - newSize));//TR
 		newPoints.Add(new Vector3(m_Points[3].x - newSize, m_Points[3].y, m_Points[3].z));//BR
-		
-		Debug.Log(newPoints[newPoints.Count-1]);
-		
+
 		// TOP LEFT
 		newPoints.Add(new Vector3(m_Points[0].x, m_Points[0].y, m_Points[0].z + newSize));//BL
 		newPoints.Add(new Vector3(m_Points[1].x, m_Points[1].y, m_Points[1].z));//TL
 		newPoints.Add(new Vector3(m_Points[2].x - newSize, m_Points[2].y, m_Points[2].z));//TR
 		newPoints.Add(new Vector3(m_Points[3].x - newSize, m_Points[3].y, m_Points[3].z + newSize));//BR
-		
-		Debug.Log(newPoints[newPoints.Count-1]);
 		
 		//TOP RIGHT
 		newPoints.Add(new Vector3(m_Points[0].x + newSize, m_Points[0].y, m_Points[0].z + newSize));//BL
@@ -67,15 +63,11 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 		newPoints.Add(new Vector3(m_Points[2].x, m_Points[2].y, m_Points[2].z));//TR
 		newPoints.Add(new Vector3(m_Points[3].x, m_Points[3].y, m_Points[3].z + newSize));//BR
 		
-		Debug.Log(newPoints[newPoints.Count-1]);
-		
 		//BOTTOM RIGHT
 		newPoints.Add(new Vector3(m_Points[0].x + newSize, m_Points[0].y, m_Points[0].z));//BL
 		newPoints.Add(new Vector3(m_Points[1].x + newSize, m_Points[1].y, m_Points[1].z - newSize));//TL
 		newPoints.Add(new Vector3(m_Points[2].x, m_Points[2].y, m_Points[2].z - newSize));//TR
 		newPoints.Add(new Vector3(m_Points[3].x, m_Points[3].y, m_Points[3].z));//BR
-		
-		Debug.Log(newPoints[newPoints.Count-1]);
 		
 		return newPoints;
 	}
@@ -92,7 +84,7 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 		}
 	}
 	
-	public void SplitAll() //TODO:: THIS WORKS FOR FIRST ITERATION BUT NOT SECOND * UNITY LOCKS UP*/stack overflows .... think its calling itself too manytimes, problem with null check?
+	public void SplitAll() 
 	{
 		// if we dont have anything lower we should split
 		if(m_Nodes.Count == 0)
@@ -127,8 +119,33 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 		
 		if(gatherPoints == true) // if this is as far as we can go we should add to the list
 		{
-			
 			pointList.Add(m_Points);
 		}
+	}
+	
+	
+	public bool FuzeBottomNode()
+	{
+		bool isBottom = false;
+		
+		for(int i = 0; i < m_Nodes.Count; ++i)
+		{
+			if(m_Nodes[i] == null)
+			{
+				return true;
+			}
+			else
+			{
+				isBottom = m_Nodes[i].FuzeBottomNode();
+			}
+		}
+		
+		if(isBottom)
+		{
+			Clear();
+		}
+		
+		return isBottom;
+		
 	}
 }

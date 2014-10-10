@@ -18,7 +18,12 @@ public class SCR_QuadTreePlane : MonoBehaviour {
 		}
 		else if(Input.GetKeyDown(KeyCode.UpArrow))
 		{
-			m_Tree.ResetTree();
+			//m_Tree.ResetTree();
+			m_Tree.FuzeBottomNodes();
+			Redraw();
+		}
+		else if(Input.GetKeyDown(KeyCode.Space))
+		{
 			Redraw();
 		}
 	}

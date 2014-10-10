@@ -33,5 +33,10 @@ public class SCR_QuadTree : MonoBehaviour {
 		m_TopNode.SplitAll();
 	}
 	
+	public void FuzeBottomNodes()// for testing 
+	{
+		m_TopNode.FuzeBottomNode();
+	}
+	
 	
 }
