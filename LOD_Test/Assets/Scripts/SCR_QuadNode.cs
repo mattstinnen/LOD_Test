@@ -107,17 +107,14 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 
 	public void GetAllPoints(ref List<List<Vector3>> pointList) // recursivly gathers all available points
 	{
-		bool gatherPoints = true;
-		for(int i = 0; i < m_Nodes.Count; ++i)
+		if(m_Nodes.Count > 0)
 		{
-			if(m_Nodes[i] != null) // if we are not at the bottom of the tree go deeper
+			for(int i = 0; i < m_Nodes.Count; ++i)
 			{
-				gatherPoints = false;
 				m_Nodes[i].GetAllPoints(ref pointList);
 			}
 		}
-		
-		if(gatherPoints == true) // if this is as far as we can go we should add to the list
+		else// if this is as far as we can go we should add to the list
 		{
 			pointList.Add(m_Points);
 		}
@@ -126,26 +123,25 @@ public class SCR_QuadNode // each node holds 4 subnodes and 4 verts basically ea
 	
 	public bool FuzeBottomNode()
 	{
-		bool isBottom = false;
-		
-		for(int i = 0; i < m_Nodes.Count; ++i)
+		bool bottomNodes = false;
+		if(m_Nodes.Count > 0) // we need to go deeper
 		{
-			if(m_Nodes[i] == null)
+			for(int i = 0; i < m_Nodes.Count; ++i)
 			{
-				return true;
-			}
-			else
-			{
-				isBottom = m_Nodes[i].FuzeBottomNode();
+				// go deeper
+				bottomNodes = m_Nodes[i].FuzeBottomNode();
 			}
 		}
+		else
+		{
+			return true;
+		}
 		
-		if(isBottom)
+		if(bottomNodes)
 		{
 			Clear();
 		}
 		
-		return isBottom;
-		
+		return false;
 	}
 }
